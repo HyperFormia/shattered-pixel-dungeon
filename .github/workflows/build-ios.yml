@@ -1,0 +1,21 @@
+name: Build ShatteredPD iOS IPA
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build Unsigned IPA
+        run: ./gradlew :ios:createIPA -Probovm.iosSkipSigning=true
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: ShatteredPD-iOS
+          path: ios/build/robovm/*.ipa
